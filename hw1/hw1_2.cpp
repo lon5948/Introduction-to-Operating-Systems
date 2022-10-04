@@ -4,35 +4,35 @@
 using namespace std;
 
 int main(){
-    cout << "Main Process ID : " << getpid();
-    if(!fork()){ //child process
+    cout << "Main Process ID : " << getpid() << endl;
+    if(!fork()){ //fork 1
         cout << "Fork 1. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
-        if(fork()>0){
-            wait(NULL);
-        }
-        else{
+        if(!fork()){ // fork 2
             cout << "Fork 2. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
-            if(fork()>0){
-                wait(NULL);
+            if(!fork()){ // fork 3
+                cout << "Fork 3. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
             }
             else{
-                cout << "Fork 3. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
+                wait(NULL);
             } 
+        }
+        else{
+            wait(NULL);
         } 
     }
-    else{ //parent process
+    else{ 
         wait(NULL);
-        if(fork()>0){
-            wait(NULL);
-            if(fork()>0){
-                wait(NULL);
-            }
-            else{
-                cout << "Fork 6. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
-            } 
+        if(!fork()){ // fork 4
+            cout << "Fork 4. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
         }
         else{
-            cout << "Fork 4. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
+            wait(NULL);
+            if(!fork()){ // fork 6
+                cout << "Fork 6. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
+            }
+            else{
+                wait(NULL);
+            } 
         } 
         cout << "Fork 5. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
     }
