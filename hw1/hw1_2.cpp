@@ -34,6 +34,7 @@ int main(){
                 wait(NULL);
             } 
         } 
+        pid = fork();
         cout << "Fork 5. I'm the child " << getpid() << ", my parent is " << getppid() << "." << endl;
     }
 }
