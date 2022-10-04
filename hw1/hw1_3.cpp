@@ -50,6 +50,7 @@ int main(void){
 		* (3) if command included &, parent will not invoke wait()
 		*/
 		if(arg[0] == "exit"){
+			should_run = 0;
 			break;
 		}
 		else{
