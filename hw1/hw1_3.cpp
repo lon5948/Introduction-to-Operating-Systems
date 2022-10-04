@@ -15,7 +15,7 @@ int main(void){
 	string tmp;
 	vector<char*> argv_t;
 	char **argv;
-	char buf[80];
+	char buf[MAX_LINE];
 	int n;
 	int argc;
 	int mode;
@@ -24,7 +24,7 @@ int main(void){
 	while(should_run){
 		cout<<"osh>";
 		fflush(stdout);
-		n = read(STDIN_FILENO, buf ,80);
+		n = read(STDIN_FILENO, buf ,MAX_LINE);
 		for(int i=0;i<n;i++){
 			if(buf[i]==' '||i==n-1){ 
 				if(tmp.size()>0) 
@@ -49,13 +49,19 @@ int main(void){
 		* (2) the child process will invoke execvp()
 		* (3) if command included &, parent will not invoke wait()
 		*/
-		if(arg[0]=="exit"){
-			should_run = 0;
+		if(arg[0] == "exit"){
+			break;
 		}
 		else{
-			if(!fork()) execvp(arg[0],arg);
-			else wait(NULL);
+			if(!fork()){
+				execvp(arg[0],arg);
+				return 0;
+			}
+			else{
+				wait(NULL);
+			}
 		}
+		
 		arg.clear();
 		argv_t.clear();
 		for(int i=0;i<argc;i++){
