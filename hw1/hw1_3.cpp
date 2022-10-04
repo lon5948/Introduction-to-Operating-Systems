@@ -54,8 +54,7 @@ int main(void){
 		}
 		else{
 			if(!fork()){
-				execvp(arg[0],arg);
-				return 0;
+				execvp(strdup(argv[0]),argv);
 			}
 			else{
 				wait(NULL);
