@@ -23,9 +23,16 @@ int main(){
         wait(NULL);
         if(fork()>0){
             wait(NULL);
+            if(fork()>0){
+                wait(NULL);
+            }
+            else{
+                cout << "Fork 6. I'm the child " << getpid() << ", my parent is " << getppid() << ".";
+            } 
         }
         else{
             cout << "Fork 4. I'm the child " << getpid() << ", my parent is " << getppid() << ".";
         } 
+        cout << "Fork 5. I'm the child " << getpid() << ", my parent is " << getppid() << ".";
     }
 }
