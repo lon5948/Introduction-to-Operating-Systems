@@ -47,9 +47,9 @@ int main(void){
 		* After reading user input, the step are:
 		* (1) fork a child process using fork()
 		* (2) the child process will invoke execvp()
-		* (3) if command included &, parent will not invoke wait()
 		*/
-		if(arg[0] == "exit"){
+
+		if(!strcmp(argv[0], "exit")){
 			should_run = 0;
 			break;
 		}
@@ -61,7 +61,7 @@ int main(void){
 				wait(NULL);
 			}
 		}
-		
+
 		arg.clear();
 		argv_t.clear();
 		for(int i=0;i<argc;i++){
