@@ -12,44 +12,40 @@ static const int threadNum = 20;
 typedef struct {
     int start;
     int end;
-    long long ans;
+    long long addans;
+    long long mulans;
 } Range;
 
-void* Addition(void* inp){
+void* func(void* inp){
     Range* data = (Range*) inp;
-    long long ret = 0;
+    long long add = 0;
+    long long mul = 0;
     for (int i = data->start; i < data->end; i++) {
         for (int j = 0; j < MAX; j++){
-            ret += matA[i][j] + matB[i][j];
+            add += matA[i][j] + matB[i][j];
+            for (int k = 0; k < MAX; k++) {
+                mul += matA[i][k] * matB[k][j];
+            }
         }   
     }
-    data->ans= ret;
+    data->addans = add;
+    data->mulans = mul;
     pthread_exit(NULL); 
-}
-
-void* Multiplication(void* inp){
-    Range* data = (Range*) inp;
-    long long ret = 0;
-    for (int i = data->start; i < data->end; i++) {
-        for (int j = 0; j < MAX; j++) {
-            for (int k = 0; k < MAX; k++) {
-                ret += matA[i][k] * matB[k][j];
-            }
-        }
-    }
-    data->ans= ret;
-    pthread_exit(NULL);
 }
 
 Range * createRangeParam(int start, int end) {
     Range* num = (Range*) malloc(sizeof(Range));
     num->start = start;
     num->end = end;
-    num->ans = 0;
+    num->addans = 0;
+    num->mulans = 0;
     return num;
 }
 
 int main(void){
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+
     //get input
     for (int i = 0; i < MAX; i++) {
         for (int j = 0; j < MAX; j++) {
@@ -63,9 +59,7 @@ int main(void){
     }
 
     Range* numList[threadNum];
-    int range;
-    if (MAX % threadNum == 0) range = MAX / threadNum;
-    else range = MAX / threadNum + 1;
+    int range = MAX / threadNum;
     int start = 0;
     int end = range;
     for (int i = 0; i < threadNum; i++) {
@@ -77,31 +71,21 @@ int main(void){
 
     pthread_t t[threadNum];
     void *ans;
-    long long mul = 0;
-    long long add = 0;
+    long long mulTotal = 0;
+    long long addTotal = 0;
     
-    // add
     for (int i = 0; i < threadNum; i++) {
-        pthread_create(&t[i],NULL,Addition,(void*) numList[i]);
+        pthread_create(&t[i],NULL,func,(void*) numList[i]);
     }   
     for (int i = 0; i < threadNum; i++) {
         pthread_join(t[i], NULL);
     }
     for (int i = 0; i < threadNum; i++) {
-        add += numList[i]->ans;
+        addTotal += numList[i]->addans;
+        mulTotal += numList[i]->mulans;
     }
+    
+    cout << addTotal << endl << mulTotal << endl;
 
-    // multiple
-    for (int i = 0; i < threadNum; i++) {
-        pthread_create(&t[i],NULL,Multiplication,(void*) numList[i]);
-    }   
-    for (int i = 0; i < threadNum; i++) {
-        pthread_join(t[i], NULL);
-    }
-    for (int i = 0; i < threadNum; i++) {
-        mul += numList[i]->ans;
-    }
-    
-    cout << add << endl << mul << endl;
     return 0;
 }
