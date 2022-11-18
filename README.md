@@ -3,3 +3,6 @@
 
 ### hw1
 - system call
+
+### hw2
+- pthread
