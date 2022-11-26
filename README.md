@@ -6,3 +6,6 @@
 
 ### hw2
 - pthread
+
+### hw2
+- CPU scheduling
