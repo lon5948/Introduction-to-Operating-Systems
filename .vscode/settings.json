@@ -3,6 +3,10 @@
         "iostream": "cpp",
         "atomic": "cpp",
         "memory": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "utility": "cpp",
+        "queue": "cpp",
+        "ostream": "cpp",
+        "chrono": "cpp"
     }
 }
